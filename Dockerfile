@@ -8,6 +8,7 @@ COPY . ./
 RUN apk add --no-cache git
 
 RUN npm install && \
+    npm install -g gulp && \
     npm install -g bower && \
     bower install --allow-root
 
