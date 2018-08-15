@@ -6,7 +6,7 @@ WORKDIR /root/pipeline-flow-editor
 COPY . ./
 
 RUN npm install && \
-    npm install -g bower &&
+    npm install -g bower && \
     bower install --allow-root
 
 
