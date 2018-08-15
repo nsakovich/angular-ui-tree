@@ -5,6 +5,8 @@ ENV PORT=9000
 WORKDIR /root/pipeline-flow-editor
 COPY . ./
 
+RUN apk add --no-cache git
+
 RUN npm install && \
     npm install -g bower && \
     bower install --allow-root
