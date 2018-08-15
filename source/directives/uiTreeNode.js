@@ -3,8 +3,8 @@
 
   angular.module('ui.tree')
 
-    .directive('uiTreeNode', ['treeConfig', 'UiTreeHelper', '$window', '$document', '$timeout', '$q',
-      function (treeConfig, UiTreeHelper, $window, $document, $timeout, $q) {
+    .directive('uiTreeNode', ['treeConfig', 'UiTreeHelper', '$window', '$document', '$timeout', '$q', '$rootScope',
+      function (treeConfig, UiTreeHelper, $window, $document, $timeout, $q, $rootScope) {
         return {
           require: ['^uiTreeNodes', '^uiTree'],
           restrict: 'A',
@@ -256,6 +256,15 @@
 
               //Insert placeholder.
               element.after(placeElm);
+
+              var topLine = window.document.createElement("span");
+              topLine.classList.add('line-top');
+              placeElm.append(topLine);
+
+              var bottomLine = window.document.createElement("span");
+              bottomLine.classList.add('line-bottom');
+              placeElm.append(bottomLine);
+
               element.after(hiddenPlaceElm);
               if (dragInfo.isClone() && scope.sourceOnly) {
                 dragElm.append(cloneElm);

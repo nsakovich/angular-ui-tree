@@ -1,46 +1,258 @@
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-  <div ui-tree-handle class="tree-node tree-node-content">
-    <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
-        class="glyphicon"
-        ng-class="{
-          'glyphicon-chevron-right': collapsed,
-          'glyphicon-chevron-down': !collapsed
-        }"></span></a>
+  <div class="tree-node tree-node-content">
+
+    <span class = "line-top"></span>
+    <span class = "line-bottom"></span>
+
+    <span ui-tree-handle class="glyphicon glyphicon-list"></span>
+
     {{node.title}}
-    <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)"><span
+    <a data-nodrag class = "remove-btn" ng-click="removeStep(this, node.title)"><span
         class="glyphicon glyphicon-remove"></span></a>
-    <a class="pull-right btn btn-primary btn-xs" data-nodrag ng-click="newSubItem(this)" style="margin-right: 8px;"><span
-        class="glyphicon glyphicon-plus"></span></a>
+
   </div>
-  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
-    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
-    </li>
+
+  <ol class = "top-tree" ng-style = "{ 'padding': node.nodes.length > 1 ? '13px 0' : '' }" ui-tree-nodes=""  ng-model="node.nodes" ng-class="{hidden: collapsed, 'has-child-nodes': hasChildNodes(this)}">
+      <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"></li>
   </ol>
+
 </script>
 
-<div class="row">
-  <div class="col-sm-12">
-    <h3>Basic Example</h3>
-
-    <button ng-click="expandAll()">Expand all</button>
-    <button ng-click="collapseAll()">Collapse all</button>
+<!-- Nested node template -->
+<script type="text/ng-template" id="available_nodes_renderer.html">
+  <div ui-tree-handle class="tree-node tree-node-content">
+    {{node.title}}
   </div>
-</div>
+</script>
 
-<div class="row">
-  <div class="col-sm-6">
-    <div ui-tree id="tree-root">
+<style>
+
+    span.line-top {
+        position: absolute;
+        left: 50%;
+        border: 1px solid;
+        height: 30px;
+        height: 22px;
+        top: -22px;
+    }
+
+    .sub-line-top {
+      position: absolute;
+      border: 2px solid #7c9eb2;
+      height: 14px;
+      border-bottom: none;
+      left: 0;
+      right: 0;
+      top: 73px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    span.line-bottom {
+      position: absolute;
+      left: 50%;
+      border: 1px solid;
+      height: 30px;
+      height: 22px;
+      bottom: -22px;
+    }
+
+    .remove-btn {
+      position: absolute;
+      right: 4px;
+      font-size: 10px;
+      line-height: 10px;
+      top: 4px;
+    }
+
+    li.angular-ui-tree-node {
+      text-align: center;
+    }
+
+    .left-col ol[ui-tree-nodes] {
+      padding-left: 0 !important;
+      width: 240px;
+      margin: auto;
+    }
+
+    .right-col ol[ui-tree-nodes] {
+      width: 240px;
+    }
+
+    li ol[ui-tree-nodes] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .angular-ui-tree-placeholder {
+      background: transparent !important;
+      min-width: 220px;
+      height: 44px !important;
+      position: relative;
+      border-width: 1px !important;
+    }
+
+    /*.angular-ui-tree-drag {
+        min-width: 220px !important;
+        max-width: 220px !important;
+        width: 220px !important;
+    }*/
+
+    .tree-node-content {
+        min-width: 220px;
+        max-width: 220px;
+        width: 220px;
+        display: inline-block;
+        position: relative;
+        text-align: left;
+        padding: 10px;
+        white-space: nowrap;
+    }
+
+    .glyphicon.angular-ui-tree-handle {
+      padding: 0;
+      border: none;
+      margin-right: 10px;
+    }
+
+    .right-col {
+        overflow-y: auto;;
+        border-left: 1px solid;
+        padding-left: 20px;
+    }
+
+    .right-col .tree-node {
+        margin: 5px 0;
+    }
+
+    .right-col {
+      overflow-x: hidden !important;
+      width: 30%;
+      height: 100%;
+    }
+
+    h1 {
+      padding-left: 30px;
+    }
+
+    .angular-ui-tree-drag .line-top,
+    .angular-ui-tree-drag .line-bottom,
+    .right-col .line-top,
+    .right-col .line-bottom {
+      display: none;
+    }
+
+    .has-child-nodes .line-top {
+      border-bottom: none;
+      border-right: none;
+      top: -15px;
+    }
+
+    .has-child-nodes .line-bottom {
+      border-top: none;
+      border-right: none;
+      bottom: -15px;
+    }
+
+    /*.not-first */
+    .has-child-nodes .line-bottom {
+      width: 240px;
+      height: 14px;
+      border-left: none;
+      border-width: 2px;
+      border-right: 2px solid;
+      border-color: #7c9eb2;
+      left: -129px;
+    }
+
+    .not-first .line-top {
+      border-top: none;
+    }
+
+    .not-first .line-bottom {
+      border-bottom: none;
+    }
+
+    /*.not-first */
+    .has-child-nodes .line-top {
+      border-left: none;
+      border-right: 2px solid;
+      border-color: #7c9eb2;
+      left: -129px;
+      width: 240px;
+      height: 14px;
+      border-width: 2px;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0px;
+    }
+
+    .vwrapper {
+      display: flex;
+      height: 100%;
+    }
+
+    /*.vwrapper > div {
+    	padding: 10px;
+      overflow: auto;
+    }*/
+
+    .left-col {
+  	    width: 70%;
+        overflow: auto;
+    }
+
+    .angular-ui-tree-empty {
+      width: 400px;
+      margin: auto;
+      background-color: #fff;
+      height: 400px;
+      position: relative;
+      text-align: center;
+    }
+
+    .angular-ui-tree-empty:before {
+      content: 'Drag and Drop steps here ...';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+    }
+
+</style>
+
+<div class="vwrapper">
+
+  <div class="left-col">
+
+    <h1 style="position: fixed">Workflow</h1>
+
+    <div ng-init = "init()" id = "flow-view" style = "padding: 100px 20px 40px 20px; width: 1400px" ui-tree data-max-depth = "2" id="tree-root">
       <ol ui-tree-nodes ng-model="data">
         <li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
       </ol>
     </div>
   </div>
 
-  <div class="col-sm-6">
+  <div class="right-col">
+
+    <h2>Available Steps</h2>
+
+    <div data-clone-enabled="true" data-nodrop-enabled="true" ui-tree id="store-root">
+      <ol ui-tree-nodes ng-model="dataStore">
+        <li ng-repeat="node in dataStore" ui-tree-node ng-include="'available_nodes_renderer.html'"></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- <div class="col-sm-6">
     <div class="info">
       {{info}}
     </div>
     <pre class="code">{{ data | json }}</pre>
-  </div>
+  </div> -->
 </div>
